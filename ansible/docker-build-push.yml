@@ -1,0 +1,26 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name:
+      command: cd practice/"{{ service }}"/ && docker build -t "{{ service }}"image:"{{ image_tag }}" --pull --no-cache . && 
+    - name:
+      command: docker login -u karitsh -p'Kartish@22' && \
+      docker tag "{{ service }}"image:"{{ image_tag }}" "{{ hubuser }}/{{ service }}"image:"{{ image_tag }}" && \
+      docker push "{{ hubuser }}/{{ service }}image":"{{ image_tag }}"
+
+
+
+
+
+
+
+
+
+
+
+
+      # docker build -t "{{ service }}"image:"{{ service }}{{ image_tag }}"" --pull --no-cache . && \
+      # docker login -u karitsh -p Kartish@22 && \
+      # docker tag "{{ service }}"image:"{{ image_tag }}" "{{ hubuser }}/{{ service }}"image:"{{ image_tag }}" && \
+      # docker push "{{ hubuser }}/{{ service }}image":"{{ image_tag }}"

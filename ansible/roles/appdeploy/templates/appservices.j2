@@ -1,0 +1,26 @@
+version: '3.1'
+
+services:
+  httpd:
+    image: httpd:2.4-alpine
+    # Port apache listens in host machine (host:container)
+    ports:
+      - 80:80
+
+  sm:
+    image: kartishr/smapp:{{smappimage_tag}}
+    # Configuration files for sm service
+    ports:
+      - 8080:8080
+
+  pep:
+    image: kartishr/pepapp:{{pepappimage_tag}}
+    # Configuration files for pep service
+    ports:
+      - 8081:8080
+
+  Discovery:
+    image: kartishr/discoveryapp:{{disappimage_tag}}
+    # Configuration files for discovery service
+    ports:
+      - 8082:8080

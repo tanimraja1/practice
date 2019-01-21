@@ -1,0 +1,7 @@
+- name: Compose file copying
+  template: src=appservices.j2 dest=/home/kalyan/docker-compose.yml  mode=0755
+
+- name: Start Docker compose file
+  docker_service:
+    project_src: /home/kalyan
+    state: present 
