@@ -60,7 +60,7 @@ def pushToImage(containerName, tag, dockerUser, dockerPassword){
 
 def runApp(containerName, tag, dockerUser){
      sh "ssh-keyscan -H 13.71.86.55 >> ~/.ssh/known_hosts && ssh -i ~/kar centos@13.71.86.55 'docker pull $dockerUser/$containerName:$tag && ls'"
-     sh "ssh-keyscan -H 13.71.86.55 >> ~/.ssh/known_hosts && scp -i ~/kar -r /var/lib/jenkins/workspace/grnpipeline/pipeline/dockercompose.yml centos@13.71.86.55:/home/centos"
+     sh "ssh-keyscan -H 13.71.86.55 >> ~/.ssh/known_hosts && scp -i ~/kar -r /var/lib/jenkins/workspace/grnpipeline/pipeline/docker-compose.yml centos@13.71.86.55:/home/centos"
      sh "ssh-keyscan -H 13.71.86.55 >> ~/.ssh/known_hosts && ssh -i ~/kar centos@13.71.86.55 'cd /home/centos && ls && docker-compose up -d'"
      echo "App services are running"
  }
