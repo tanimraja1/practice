@@ -1,7 +1,6 @@
 def CONTAINER_NAME="smappimage"
 def CONTAINER_TAG="0.0.4"
 def DOCKER_HUB_USER="kartish"
-def SSH_USERNAME=centos
 
 node {
 
@@ -36,7 +35,7 @@ node {
 
     stage('Run App'){
          //withCredentials([usernamePassword(credentialsId: 'sshserver', usernameVariable: 'USERNAME')])
-            runApp(CONTAINER_NAME, CONTAINER_TAG, DOCKER_HUB_USER, SSH_USERNAME)
+            runApp(CONTAINER_NAME, CONTAINER_TAG, DOCKER_HUB_USER)
      }
 
 }
@@ -59,9 +58,9 @@ def pushToImage(containerName, tag, dockerUser, dockerPassword){
     echo "Image push complete"
 }
 
-def runApp(containerName, tag, dockerUser, serveruser){
-     sh "ssh $serveruser@13.71.86.55 'docker pull $dockerUser/$containerName:$tag && ls'"
-     sh "cp -r /var/lib/jenkins/workspace/grnpipeline/smapp && ssh $serveruser@13.71.86.55:/home/$serveruser"
-     sh "cd /home/$serveruser && docker-compose up -d"
+def runApp(containerName, tag, dockerUser){
+     sh "ssh centos@13.71.86.55 'docker pull $dockerUser/$containerName:$tag && ls'"
+     sh "cp -r /var/lib/jenkins/workspace/grnpipeline/smapp/* && ssh centos@13.71.86.55:/home/$serveruser"
+     sh "cd /home/centos && docker-compose up -d"
      echo "App services are running"
  }
