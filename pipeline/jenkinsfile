@@ -58,7 +58,7 @@ def pushToImage(containerName, tag, dockerUser, dockerPassword){
     echo "Image push complete"
 }
 
-def runApp(containerName, tag, dockerUser, dockerPassword){
+def runApp(containerName, tag){
      sh "ssh-keyscan -H $params.ip >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$params.ip 'docker pull $params.ip:8090/$containerName:$params.tag && ls'"
      sh "ssh-keyscan -H $params.ip >> ~/.ssh/known_hosts && scp -i ~/kar -r /var/lib/jenkins/workspace/grnpipeline/pipeline/docker-compose.yml centos@$params.ip:/home/centos"
      sh "ssh-keyscan -H $params.ip >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$params.ip 'cd /home/centos && ls && docker-compose up -d'"
