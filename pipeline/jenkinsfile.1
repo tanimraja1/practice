@@ -1,0 +1,66 @@
+def CONTAINER_NAME="smappimage"
+def CONTAINER_TAG="0.0.4"
+def DOCKER_HUB_USER="kartish"
+
+node {
+
+    // stage('Initialize'){
+    //     def dockerHome = tool 'myDocker'
+    //     def mavenHome  = tool 'myMaven'
+    //     env.PATH = "${dockerHome}/bin:${mavenHome}/bin:${env.PATH}"
+    // }
+
+    stage('Checkout') {
+        checkout scm
+    }
+
+    // stage('Build'){
+    //     sh "mvn clean install"
+    // }
+
+    stage("Image Prune"){
+        sh 'whoami'
+        imagePrune(CONTAINER_NAME)
+    }
+
+    stage('Image Build'){
+        imageBuild(CONTAINER_NAME, CONTAINER_TAG)
+    }
+
+    stage('Push to Docker Registry'){
+         withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+            pushToImage(CONTAINER_NAME, CONTAINER_TAG, USERNAME, PASSWORD)
+        }
+    }
+
+    stage('Run App'){
+         //withCredentials([usernamePassword(credentialsId: 'sshserver', usernameVariable: 'USERNAME')])
+            runApp(CONTAINER_NAME, CONTAINER_TAG, DOCKER_HUB_USER)
+     }
+
+}
+
+def imagePrune(containerName){
+    try {
+        sh "docker image prune -f"
+    } catch(error){}
+}
+
+def imageBuild(containerName, tag){
+    sh "cd smapp && docker build -t $containerName:$tag  -t $containerName --pull --no-cache ."
+    echo "Image build complete"
+}
+
+def pushToImage(containerName, tag, dockerUser, dockerPassword){
+    sh "docker login -u $dockerUser -p $dockerPassword"
+    sh "docker tag $containerName:$tag $dockerUser/$containerName:$tag"
+    sh "docker push $dockerUser/$containerName:$tag"
+    echo "Image push complete"
+}
+
+def runApp(containerName, tag, dockerUser){
+     sh "ssh-keyscan -H $params.ip >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$params.ip 'docker pull $dockerUser/$containerName:$tag && ls'"
+     sh "ssh-keyscan -H $params.ip >> ~/.ssh/known_hosts && scp -i ~/kar -r /var/lib/jenkins/workspace/grnpipeline/pipeline/docker-compose.yml centos@$params.ip:/home/centos"
+     sh "ssh-keyscan -H $params.ip >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$params.ip 'cd /home/centos && ls && docker-compose up -d'"
+     echo "App services are running"
+ }
