@@ -1,6 +1,7 @@
 def CONTAINER_NAME="smappimage"
-def CONTAINER_TAG="0.0.4"
+def CONTAINER_TAG="$params.tag"
 def DOCKER_HUB_USER="kartish"
+def REMOTE_IP="$params.ip"
 
 node {
 
@@ -35,7 +36,7 @@ node {
 
     stage('Run App'){
          withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
-            runApp(CONTAINER_NAME, CONTAINER_TAG, DOCKER_HUB_USER, USERNAME, PASSWORD)
+            runApp(CONTAINER_NAME, CONTAINER_TAG, DOCKER_HUB_USER, REMOTE_IP, USERNAME, PASSWORD)
      }
 
 }
@@ -58,9 +59,9 @@ def pushToImage(containerName, tag, dockerUser, dockerPassword){
     echo "Image push complete"
 }
 
-def runApp(containerName, tag, dockerHubUser, dockerUser, dockerPassword){
-     sh "ssh-keyscan -H $params.ip >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$params.ip 'docker pull $params.ip:8090/$containerName:$params.tag && ls'"
-     sh "ssh-keyscan -H $params.ip >> ~/.ssh/known_hosts && scp -i ~/kar -r /var/lib/jenkins/workspace/grnpipeline/pipeline/docker-compose.yml centos@$params.ip:/home/centos"
-     sh "ssh-keyscan -H $params.ip >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$params.ip 'cd /home/centos && ls && docker-compose up -d'"
+def runApp(containerName, tag, dockerHubUser, remoteIp, dockerUser, dockerPassword){
+     sh "ssh-keyscan -H $remoteIp >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$remoteIp 'docker pull $remoteIp:8090/$containerName:$tag && ls'"
+     sh "ssh-keyscan -H $remoteIp >> ~/.ssh/known_hosts && scp -i ~/kar -r /var/lib/jenkins/workspace/grnpipeline/pipeline/docker-compose.yml centos@$remoteIp:/home/centos"
+     sh "ssh-keyscan -H $remoteIp >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$remoteIp 'cd /home/centos && ls && docker-compose up -d'"
      echo "App services are running"
  }
