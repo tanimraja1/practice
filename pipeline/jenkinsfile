@@ -34,8 +34,8 @@ node {
     }
 
     stage('Run App'){
-         //withCredentials([usernamePassword(credentialsId: 'sshserver', usernameVariable: 'USERNAME')])
-            runApp(CONTAINER_NAME, CONTAINER_TAG, DOCKER_HUB_USER)
+         //withCredentials([usernamePassword(credentialsId: 'sshserver', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
+            runApp(CONTAINER_NAME, CONTAINER_TAG, USERNAME, PASSWORD)
      }
 
 }
@@ -58,7 +58,7 @@ def pushToImage(containerName, tag, dockerUser, dockerPassword){
     echo "Image push complete"
 }
 
-def runApp(containerName, tag, dockerUser){
+def runApp(containerName, tag, dockerUser, dockerPassword){
      sh "ssh-keyscan -H $params.ip >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$params.ip 'docker login -u $dockerUser -p $dockerPassword $params.ip:8090 && docker pull $params.ip:8090/$containerName:$params.tag && ls'"
      sh "ssh-keyscan -H $params.ip >> ~/.ssh/known_hosts && scp -i ~/kar -r /var/lib/jenkins/workspace/grnpipeline/pipeline/docker-compose.yml centos@$params.ip:/home/centos"
      sh "ssh-keyscan -H $params.ip >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$params.ip 'cd /home/centos && ls && docker-compose up -d'"
