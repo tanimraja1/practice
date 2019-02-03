@@ -39,6 +39,8 @@ node {
 
     stage('Run App'){
          withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
+            def REMOTE_IP="$params.ip"
+            def CONTAINER_TAG="$params.tag"
             runApp(CONTAINER_NAME, CONTAINER_TAG, DOCKER_HUB_USER, REMOTE_IP, USERNAME, PASSWORD)
      }
 
