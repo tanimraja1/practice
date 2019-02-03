@@ -1,21 +1,21 @@
 version: "3"
 services:
  tomcat1:
-  image: 13.71.84.174:8090/smappimage:0.0.1
+  image: nexusserver:8090/smappimage:latest
   container_name: tomcat1
   hostname: tomcat1
  tomcat2:
-  image: 13.71.84.174:8090/pepappimage:0.0.1
+  image: nexusserver:8090/pepappimage:latest
   container_name: tomcat2
   hostname: tomcat2
  tomcat3:
-  image: 13.71.84.174:8090/portalappimage:0.0.1
+  image: nexusserver:8090/portalappimage:latest
   container_name: tomcat3
   hostname: tomcat3
  httpd:
   container_name: httpd
   hostname: httpd
-  image: 13.71.84.174:8090/httpd
+  image: nexusserver:8090/httpd
   ports:
    - "80:80"
    - "443:443"
