@@ -25,6 +25,7 @@ node {
     }
 
     stage('Image Build'){
+        def CONTAINER_TAG="$params.tag"
         imageBuild(CONTAINER_NAME, CONTAINER_TAG)
     }
 
