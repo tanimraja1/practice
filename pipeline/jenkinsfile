@@ -1,7 +1,7 @@
 def CONTAINER_NAME="smappimage"
-def CONTAINER_TAG="$params.tag"
+//def CONTAINER_TAG="$params.tag"
 def DOCKER_HUB_USER="kartish"
-def REMOTE_IP="$params.ip"
+//def REMOTE_IP="$params.ip"
 
 node {
 
@@ -30,6 +30,8 @@ node {
 
     stage('Push to Docker Registry'){
          withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+            def REMOTE_IP="$params.ip"
+            def CONTAINER_TAG="$params.tag"
             pushToImage(CONTAINER_NAME, CONTAINER_TAG, REMOTE_IP, USERNAME, PASSWORD)
         }
     }
