@@ -41,8 +41,8 @@ node {
          withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
             def REMOTE_IP="$params.ip"
             def CONTAINER_TAG="$params.tag"
-            sh "ssh-keyscan -H $params.ip >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$params.ip 'docker pull 13.71.84.174:8090/$containerName:$tag && ls'"
-            sh "ssh-keyscan -H $params.ip >> ~/.ssh/known_hosts && scp -i ~/kar -r /var/lib/jenkins/workspace/grnpipeline/pipeline/docker-compose.yml centos@$remoteIp:/home/centos"
+            sh "ssh-keyscan -H $params.ip >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$params.ip 'docker pull 13.71.84.174:8090/$containerName:$params.tag && ls'"
+            sh "ssh-keyscan -H $params.ip >> ~/.ssh/known_hosts && scp -i ~/kar -r /var/lib/jenkins/workspace/grnpipeline/pipeline/docker-compose.yml centos@$params.ip:/home/centos"
             sh "ssh-keyscan -H $params.ip >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$params.ip 'cd /home/centos && ls && docker-compose up -d'"
             echo "App services are running"
             //runApp(CONTAINER_NAME, CONTAINER_TAG, REMOTE_IP, USERNAME, PASSWORD)
