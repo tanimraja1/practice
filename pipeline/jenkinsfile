@@ -55,14 +55,14 @@ def imageBuild(containerName, tag, service){
 
 def pushToImage(containerName, tag, remoteIp, dockerUser, dockerPassword){
     sh "docker login -u $dockerUser -p $dockerPassword $remoteIp:8090"
-    sh "docker tag $containerName:$tag $remoteIp:8090/$containerName:$tag"
-    sh "docker push $remoteIp:8090/$containerName:$tag"
+    sh "docker tag $containerName:$tag $remoteIp:8090/$containerName:$tag && docker tag $containerName:latest $remoteIp:8090/$containerName:latest"
+    sh "docker push $remoteIp:8090/$containerName:$tag && docker push $remoteIp:8090/$containerName:latest"
     echo "Image push complete"
 }
 
 def runApp(containerName, tag, remoteIp, dockerUser, dockerPassword){
      sh "ssh-keyscan -H $remoteIp >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$remoteIp 'docker login -u $dockerUser -p $dockerPassword $remoteIp:8090 && docker pull $remoteIp:8090/$containerName:$tag'"
-     sh "sed -i -e 's/nexusserver/$remoteIp/g' pipeline/docker-compose.yml && sed -i -e 's/latest/$tag/g' pipeline/docker-compose.yml"
+     sh "sed -i -e 's/nexusserver/$remoteIp/g' pipeline/docker-compose.yml"
      sh "ssh-keyscan -H $remoteIp >> ~/.ssh/known_hosts && scp -i ~/kar -r /var/lib/jenkins/workspace/grnpipeline/pipeline/docker-compose.yml centos@$remoteIp:/home/centos"
      sh "ssh-keyscan -H $remoteIp >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$remoteIp 'cd /home/centos && docker login -u $dockerUser -p $dockerPassword $remoteIp:8090 && docker-compose up -d'"
      echo "App services are running"
