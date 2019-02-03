@@ -1,15 +1,15 @@
 version: "3"
 services:
  tomcat1:
-  image: tanimraja1/c7-systemd-java-tomcat
+  image: smappimage:0.0.1
   container_name: tomcat1
   hostname: tomcat1
  tomcat2:
-  image: tanimraja1/c7-systemd-java-tomcat
+  image: smappimage:0.0.1
   container_name: tomcat2
   hostname: tomcat2
  tomcat3:
-  image: tanimraja1/c7-systemd-java-tomcat
+  image: smappimage:0.0.1
   container_name: tomcat3
   hostname: tomcat3
  httpd:
