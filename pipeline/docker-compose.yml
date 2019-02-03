@@ -1,21 +1,21 @@
 version: "3"
 services:
  tomcat1:
-  image: smappimage:0.0.1
+  image: 13.71.84.174:8090/smappimage:0.0.1
   container_name: tomcat1
   hostname: tomcat1
  tomcat2:
-  image: smappimage:0.0.1
+  image: 13.71.84.174:8090/smappimage:0.0.1
   container_name: tomcat2
   hostname: tomcat2
  tomcat3:
-  image: smappimage:0.0.1
+  image: 13.71.84.174:8090/smappimage:0.0.1
   container_name: tomcat3
   hostname: tomcat3
  httpd:
   container_name: httpd
   hostname: httpd
-  image: tanimraja1/c7-httpd
+  image: 13.71.84.174:8090/httpd
   ports:
    - "80:80"
    - "443:443"
