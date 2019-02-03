@@ -53,14 +53,14 @@ def imageBuild(containerName, tag){
 }
 
 def pushToImage(containerName, tag, remoteIp, dockerUser, dockerPassword){
-    sh "docker login -u $dockerUser -p $dockerPassword $remoteIp:8090"
-    sh "docker tag $containerName:$params.tag $params.ip:8090/$containerName:$params.tag"
-    sh "docker push $params.ip:8090/$containerName:$params.tag"
+    sh "docker login -u $dockerUser -p $dockerPassword ${remoteIp}:8090"
+    sh "docker tag $containerName:${params.tag} ${params.ip}:8090/${containerName}:${params.tag}"
+    sh "docker push ${params.ip}:8090/${containerName}:${params.tag}"
     echo "Image push complete"
 }
 
 def runApp(containerName, tag, dockerHubUser, remoteIp, dockerUser){
-     sh "ssh-keyscan -H $remoteIp >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$remoteIp 'docker pull $remoteIp:8090/$containerName:$tag && ls'"
+     sh "ssh-keyscan -H $remoteIp >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$remoteIp 'docker pull ${remoteIp}:8090/${containerName}:$tag && ls'"
      sh "ssh-keyscan -H $remoteIp >> ~/.ssh/known_hosts && scp -i ~/kar -r /var/lib/jenkins/workspace/grnpipeline/pipeline/docker-compose.yml centos@$remoteIp:/home/centos"
      sh "ssh-keyscan -H $remoteIp >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$remoteIp 'cd /home/centos && ls && docker-compose up -d'"
      echo "App services are running"
