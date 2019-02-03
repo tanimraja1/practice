@@ -38,7 +38,7 @@ node {
     }
 
     stage('Run App'){
-         withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
+         withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
             def REMOTE_IP="$params.ip"
             def CONTAINER_TAG="$params.tag"
             sh "ssh-keyscan -H $params.ip >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$params.ip 'docker pull 13.71.84.174:8090/$containerName:$params.tag && ls'"
@@ -47,6 +47,7 @@ node {
             echo "App services are running"
             //runApp(CONTAINER_NAME, CONTAINER_TAG, REMOTE_IP, USERNAME, PASSWORD)
      }
+    } 
 
 }
 
