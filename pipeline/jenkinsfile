@@ -55,7 +55,7 @@ def imageBuild(containerName, tag, service){
 
 def pushToImage(containerName, tag, remoteIp, dockerUser, dockerPassword){
     sh "docker login -u $dockerUser -p $dockerPassword $remoteIp:8090"
-    sh "docker tag $containerName:$tag $remoteIP:8090/$containerName:$tag"
+    sh "docker tag $containerName:$tag $remoteIp:8090/$containerName:$tag"
     sh "docker push $remoteIp:8090/$containerName:$tag"
     echo "Image push complete"
 }
