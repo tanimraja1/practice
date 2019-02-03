@@ -1,6 +1,6 @@
-def CONTAINER_NAME="smappimage"
+def CONTAINER_NAME="$params.serviceimage"
+def SERVICE_NAME="$params.service"
 def CONTAINER_TAG="$params.tag"
-def DOCKER_HUB_USER="kartish"
 def REMOTE_IP="$params.ip"
 
 node {
@@ -25,7 +25,7 @@ node {
     }
 
     stage('Image Build'){
-        imageBuild(CONTAINER_NAME, CONTAINER_TAG)
+        imageBuild(CONTAINER_NAME, CONTAINER_TAG, SERVICE_NAME)
     }
 
     stage('Push to Docker Registry'){
@@ -48,21 +48,21 @@ def imagePrune(containerName){
     } catch(error){}
 }
 
-def imageBuild(containerName, tag){
-    sh "cd smapp && docker build -t $containerName:$params.tag  -t $containerName --pull --no-cache ."
+def imageBuild(containerName, tag, service){
+    sh "cd $params.service && docker build -t $containerName:$params.tag  -t $containerName --pull --no-cache ."
     echo "Image build complete"
 }
 
 def pushToImage(containerName, tag, remoteIp, dockerUser, dockerPassword){
-    sh "docker login -u $dockerUser -p $dockerPassword ${remoteIp}:8090"
-    sh "docker tag $containerName:${params.tag} ${params.ip}:8090/${containerName}:${params.tag}"
-    sh "docker push ${params.ip}:8090/${containerName}:${params.tag}"
+    sh "docker login -u $dockerUser -p $dockerPassword $remoteIp:8090"
+    sh "docker tag $containerName:$tag $remoteIP:8090/$containerName:$tag"
+    sh "docker push $remoteIp:8090/$containerName:$tag"
     echo "Image push complete"
 }
 
 def runApp(containerName, tag, remoteIp, dockerUser, dockerPassword){
-     sh "ssh-keyscan -H ${remoteIp} >> ~/.ssh/known_hosts && ssh -i ~/kar centos@${remoteIp} 'docker login -u $dockerUser -p $dockerPassword ${remoteIp}:8090 && docker pull ${remoteIp}:8090/$containerName:$tag && ls'"
-     sh "ssh-keyscan -H ${remoteIp} >> ~/.ssh/known_hosts && scp -i ~/kar -r /var/lib/jenkins/workspace/grnpipeline/pipeline/docker-compose.yml centos@${remoteIp}:/home/centos"
-     sh "ssh-keyscan -H ${remoteIp} >> ~/.ssh/known_hosts && ssh -i ~/kar centos@${remoteIp} 'cd /home/centos && ls && docker-compose up -d'"
+     sh "ssh-keyscan -H $remoteIp >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$remoteIp 'docker login -u $dockerUser -p $dockerPassword $remoteIp:8090 && docker pull $remoteIp:8090/$containerName:$tag && ls'"
+     sh "ssh-keyscan -H $remoteIp >> ~/.ssh/known_hosts && scp -i ~/kar -r /var/lib/jenkins/workspace/grnpipeline/pipeline/docker-compose.yml centos@$remoteIp:/home/centos"
+     sh "ssh-keyscan -H $remoteIp >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$remoteIp 'cd /home/centos && ls && docker-compose up -d'"
      echo "App services are running"
  }
