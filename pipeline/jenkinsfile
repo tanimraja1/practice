@@ -41,7 +41,7 @@ node {
          withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
             def REMOTE_IP="$params.ip"
             def CONTAINER_TAG="$params.tag"
-            runApp(CONTAINER_NAME, CONTAINER_TAG, DOCKER_HUB_USER, REMOTE_IP, USERNAME, PASSWORD)
+            runApp(CONTAINER_NAME, CONTAINER_TAG, REMOTE_IP, USERNAME, PASSWORD)
      }
 
 }
@@ -64,7 +64,7 @@ def pushToImage(containerName, tag, remoteIp, dockerUser, dockerPassword){
     echo "Image push complete"
 }
 
-def runApp(containerName, tag, dockerHubUser, remoteIp, dockerUser){
+def runApp(containerName, tag, remoteIp, dockerUser, dockerPassword){
      sh "ssh-keyscan -H $remoteIp >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$remoteIp 'docker pull 13.71.84.174:8090/$containerName:$tag && ls'"
      sh "ssh-keyscan -H $remoteIp >> ~/.ssh/known_hosts && scp -i ~/kar -r /var/lib/jenkins/workspace/grnpipeline/pipeline/docker-compose.yml centos@$remoteIp:/home/centos"
      sh "ssh-keyscan -H $remoteIp >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$remoteIp 'cd /home/centos && ls && docker-compose up -d'"
