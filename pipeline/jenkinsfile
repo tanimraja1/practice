@@ -65,8 +65,8 @@ def pushToImage(containerName, tag, remoteIp, dockerUser, dockerPassword){
 }
 
 def runApp(containerName, tag, remoteIp, dockerUser, dockerPassword){
-     sh "ssh-keyscan -H $remoteIp >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$remoteIp 'docker pull 13.71.84.174:8090/$containerName:$tag && ls'"
-     sh "ssh-keyscan -H $remoteIp >> ~/.ssh/known_hosts && scp -i ~/kar -r /var/lib/jenkins/workspace/grnpipeline/pipeline/docker-compose.yml centos@$remoteIp:/home/centos"
-     sh "ssh-keyscan -H $remoteIp >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$remoteIp 'cd /home/centos && ls && docker-compose up -d'"
+     sh "ssh-keyscan -H ${remoteIp} >> ~/.ssh/known_hosts && ssh -i ~/kar centos@${remoteIp} 'docker pull 13.71.84.174:8090/$containerName:$tag && ls'"
+     sh "ssh-keyscan -H ${remoteIp} >> ~/.ssh/known_hosts && scp -i ~/kar -r /var/lib/jenkins/workspace/grnpipeline/pipeline/docker-compose.yml centos@$remoteIp:/home/centos"
+     sh "ssh-keyscan -H ${remoteIp} >> ~/.ssh/known_hosts && ssh -i ~/kar centos@${remoteIp} 'cd /home/centos && ls && docker-compose up -d'"
      echo "App services are running"
  }
