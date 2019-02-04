@@ -61,7 +61,7 @@ def pushToImage(containerName, tag, remoteIp, dockerUser, dockerPassword){
 }
 
 def runApp(containerName, tag, remoteIp, dockerUser, dockerPassword){
-     sh "ssh-keyscan -H $remoteIp >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$remoteIp 'docker login -u $dockerUser -p $dockerPassword $remoteIp:8090 && docker rmi -f $remoteIp:8090/$containerName:latest && docker pull $remoteIp:8090/$containerName:$tag && docker pull $remoteIp:8090/$containerName:latest'"
+     sh "ssh-keyscan -H $remoteIp >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$remoteIp 'docker login -u $dockerUser -p $dockerPassword $remoteIp:8090 && docker rmi -f $remoteIp:8090/$containerName:latest && docker pull $remoteIp:8090/$containerName:latest'"
      sh "sed -i -e 's/nexusserver/$remoteIp/g' pipeline/docker-compose.yml"
      sh "ssh-keyscan -H $remoteIp >> ~/.ssh/known_hosts && scp -i ~/kar -r /var/lib/jenkins/workspace/grnpipeline/pipeline/docker-compose.yml centos@$remoteIp:/home/centos" 
      sh "ssh-keyscan -H $remoteIp >> ~/.ssh/known_hosts && ssh -i ~/kar centos@$remoteIp 'cd /home/centos && docker login -u $dockerUser -p $dockerPassword $remoteIp:8090 &&  docker-compose up -d'"
