@@ -1,2 +1,2 @@
-FROM tanimraja1/c7-systemd-java-tomcat
+FROM kartish/c7-java-tomcat
 copy sample.war /opt/tomcat/webapps
