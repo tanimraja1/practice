@@ -18,4 +18,4 @@ services:
   image: nexusserver:80/httpd/httpd
   ports:
    - "80:80"
-   - "443:443"
+   - "444:444"
