@@ -17,5 +17,4 @@ services:
   hostname: httpd
   image: nexusserver:80/httpd/httpd
   ports:
-   - "801:801"
-   - "444:444"
+   - "8080:80"
