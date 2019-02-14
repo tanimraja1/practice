@@ -1,2 +1,2 @@
 FROM kartish/c7-java-tomcat
-copy pepapp.war /opt/tomcat/webapps
+copy pepapp.war /opt/tomcat/webapps/pepapp.war
