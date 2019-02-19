@@ -15,6 +15,6 @@ services:
  httpd:
   container_name: httpd
   hostname: httpd
-  image: nexusserver:8082/httpd/httpd
+  image: nexusserver:8082/httpd/httpdimage
   ports:
   - "80:80"
