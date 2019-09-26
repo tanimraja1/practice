@@ -32,9 +32,6 @@ node {
          withCredentials([usernamePassword(credentialsId: 'harbor-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
             pushToImage(CONTAINER_NAME, CONTAINER_TAG, REMOTE_IP, USERNAME, PASSWORD)
         }
-    }
-
-    
     } 
 
 }
