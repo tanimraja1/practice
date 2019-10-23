@@ -54,6 +54,7 @@ def pushToImage(containerName, tag, remoteIp, dockerUser, dockerPassword){
     echo "Image push complete"
 }
 
+    node {
     stage('MyStage') {
         ansibleTower(
             towerServer: 'awx',
@@ -70,3 +71,4 @@ def pushToImage(containerName, tag, remoteIp, dockerUser, dockerPassword){
             async: false
         )
     }
+}
