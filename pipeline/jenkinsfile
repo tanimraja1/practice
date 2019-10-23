@@ -53,3 +53,20 @@ def pushToImage(containerName, tag, remoteIp, dockerUser, dockerPassword){
     sh "docker push $remoteIp:80/$params.service/$containerName:$tag && docker push $remoteIp:80/$params.service/$containerName:latest"
     echo "Image push complete"
 }
+
+    stage('MyStage') {
+        ansibleTower(
+            towerServer: 'awx',
+            templateType: 'job',
+            jobTemplate: 'docker',
+            importTowerLogs: true,
+            inventory: 'Demo Inventory',
+            jobTags: '',
+            skipJobTags: '',
+            limit: '',
+            removeColor: false,
+            verbose: true,
+            credential: '',
+            async: false
+        )
+    }
