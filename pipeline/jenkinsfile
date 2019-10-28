@@ -72,7 +72,8 @@ def pushToImage(containerName, tag, remoteIp, dockerUser, dockerPassword){
 ip: "$ip"
 service: "$service"
 serviceimage: "$serviceimage"
-tag: "$tag"''',
+tag: "$tag"
+pass: "$dockerPassword"''',
             async: false
         )
     }
