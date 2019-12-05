@@ -15,6 +15,6 @@ services:
  httpd:
   container_name: httpd
   hostname: httpd
-  image: 192.168.0.84:80/httpd/httpdimage
+  image: 192.168.0.84:80/httpd/httpd
   ports:
   - "80:80"
